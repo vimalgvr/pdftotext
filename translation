@@ -1,0 +1,45 @@
+#-*- coding: utf8 -*-
+import tempfile
+from pdf2image import convert_from_path, convert_from_bytes
+import os
+
+from pdf2image.exceptions import (
+    PDFInfoNotInstalledError,
+    PDFPageCountError,
+    PDFSyntaxError
+)
+
+file = 'C:/Users/Vimal/Desktop/ocr/D.pdf'
+
+with tempfile.TemporaryDirectory() as path:
+    images_from_path = convert_from_path(file, poppler_path=r'C:\Program Files\poppler-0.68.0\bin')
+    
+base_filename  =  os.path.splitext(os.path.basename(file))[1] + '.jpeg'
+
+save_dir = 'C:/Users/Vimal/Desktop/ocr'
+
+for page in images_from_path:
+    page.save(os.path.join(save_dir, base_filename), 'JPEG') # PDF to image conversion ends.
+    
+#image to text starts as second process
+import pytesseract
+from PIL import Image  
+from googletrans import Translator
+
+
+img = Image.open('C:/Users/Vimal/Desktop/ocr/D.jpeg')
+
+print(img)
+
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\tesseract-OCR\tesseract.exe' #" pytesseract not in path " if u get such error use this line
+
+result = pytesseract.image_to_string(img)
+
+with open('C:/Users/Vimal/Desktop/ocr/D.pdf',mode ='w') as file:
+    file.write(result)
+    print(result)                    
+p = Translator()    
+
+
+k = p.translate(result,dest='ka')        # any indic lang code can be used here....
+print(k)
