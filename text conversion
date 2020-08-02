@@ -1,0 +1,40 @@
+#-*- coding: utf8 -*-
+from PyPDF2 import PdfFileReader
+from pathlib import Path
+import pytesseract
+from PIL import Image  
+from googletrans import Translator
+
+pdf_path = (
+...     Path.home()
+
+...     / "C:/Users/Vimal/Desktop/ocr/D.pdf"
+... )
+
+pdf = PdfFileReader(str(pdf_path))
+pdf.getNumPages()
+pdf.documentInfo
+pdf_reader = PdfFileReader(str(pdf_path))
+first_page = pdf.getPage(0)
+type(first_page)
+first_page.extractText()
+for page in pdf.pages:
+    print(page.extractText()) # Extract full document
+from pathlib import Path
+from PyPDF2 import PdfFileReader
+
+pdf_path = (
+    Path.home()
+    / "C:/Users/Vimal/Desktop/ocr/DEED_15072020174745.pdf"
+)
+    
+pdf_reader = PdfFileReader(str(pdf_path))
+output_file_path = Path.home() / "C:/Users/Vimal/Desktop/ocr/E.txt"
+with output_file_path.open(mode="w") as output_file:
+    title = pdf_reader.documentInfo.title
+    num_pages = pdf_reader.getNumPages()
+    output_file.write(f"\\Number of pages: {num_pages}\\n\\n")
+    
+    for page in pdf_reader.pages:
+        text = page.extractText()
+        output_file.write(text)  # pdf extracted as txt in source folder.
